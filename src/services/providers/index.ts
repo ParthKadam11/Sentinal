@@ -7,11 +7,10 @@ const providers = {
   openai: generateOpenAIResponse,
 }
 
-
-
 export async function generateResponse(
     provider:keyof typeof providers,
     message:string) {
+        
     const selectedProvider= providers[provider]
 
     if(!selectedProvider){

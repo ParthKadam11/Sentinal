@@ -27,6 +27,7 @@ export async function generateOpenAIResponse(message: string) {
         content:res.choices[0].message.content,
         usage:res.usage,
         model:res.model,
-        latency
+        latency,
+        provider:'openai'
     }
 }
