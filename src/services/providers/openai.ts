@@ -10,19 +10,23 @@ const client = new OpenAi({
 })
 
 export async function generateChatResponse(message: string) {
+    const start = Date.now()
     const res = await client.chat.completions.create({
-        model:"gpt-4.1-mini",
+        model:"gpt-4.1-nano",
         messages:[
             {
                 role:"user",
                 content:message,
             }
-        ]
+        ],
+        max_completion_tokens:100,
+        temperature:0.1,
     })
-
+    const latency = Date.now()-start
     return{
         content:res.choices[0].message.content,
         usage:res.usage,
-        model:res.model
+        model:res.model,
+        latency
     }
 }
