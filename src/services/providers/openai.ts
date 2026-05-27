@@ -9,7 +9,7 @@ const client = new OpenAi({
     apiKey,
 })
 
-export async function generateChatResponse(message: string) {
+export async function generateOpenAIResponse(message: string) {
     const start = Date.now()
     const res = await client.chat.completions.create({
         model:"gpt-4.1-nano",
