@@ -1,5 +1,5 @@
 {
-  "name": "ai-usage-tracker",
+  "name": "sentinal",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -9,12 +9,22 @@
   "dependencies": {
     "@hono/node-server": "^1.19.14",
     "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
     "hono": "^4.12.23",
-    "openai": "^6.39.0"
+    "openai": "^6.39.0",
+    "postgres": "^3.4.9"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "drizzle-kit": "^0.31.10",
+    "esbuild": "0.28.0",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
+  },
+  "overrides": {
+    "esbuild": "0.28.0",
+    "@esbuild-kit/core-utils>esbuild": "0.28.0",
+    "@esbuild-kit/esm-loader>esbuild": "0.28.0",
+    "@esbuild-kit/core-utils@3.3.2>esbuild": "0.28.0"
   }
 }
