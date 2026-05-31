@@ -41,7 +41,38 @@ analyticsRoute.get("/recent", async (c) => {
 })
 
 analyticsRoute.get("/providers", async (c)=>{
-    
+    try {
+    const logs = await db.select().from(requestLogs)
+    const providers: Record<string,{
+    requests: number
+    totalTokens: number
+    totalLatency: number
+    estimatedSpend: number
+    }> = {}
+
+    for (const log of logs) {
+    if (!providers[log.provider]) {
+        providers[log.provider] = {
+        requests: 0,
+        totalTokens: 0,
+        totalLatency: 0,
+        estimatedSpend: 0,
+        }
+    }
+
+    providers[log.provider].requests += 1
+    providers[log.provider].totalTokens += log.totalTokens
+    providers[log.provider].totalLatency += log.latency
+    providers[log.provider].estimatedSpend +=
+        log.estimatedCost ?? 0
+    }
+
+  } catch (err) {
+    return c.json(
+      { error: "Failed to fetch provider analytics" },
+      500
+    )
+  }
 })
 
 export default analyticsRoute
