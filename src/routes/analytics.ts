@@ -10,11 +10,12 @@ analyticsRoute.get("/", async (c) => {
         const totalRequests = logs.length   
         const totalTokens = logs.reduce((sum, log) => sum + log.totalTokens,0)
         const averageLatency = logs.length > 0 ? logs.reduce((sum, log) => sum + log.latency, 0) / logs.length: 0
-
+        const totalCost = logs.reduce((sum, log) => sum + (log.estimatedCost ?? 0),0)
     return c.json({
         totalRequests,
         totalTokens,
         averageLatency: Number(averageLatency.toFixed(2)),
+        estimateCost:Number(totalCost.toFixed(8)) 
     })
     } 
     
@@ -37,6 +38,10 @@ analyticsRoute.get("/recent", async (c) => {
             500
         )
     }
+})
+
+analyticsRoute.get("/providers", async (c)=>{
+    
 })
 
 export default analyticsRoute

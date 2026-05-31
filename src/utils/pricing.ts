@@ -12,6 +12,7 @@ export function calculateCost(
   completionTokens: number
 ) {
   if (!isModelName(model)) {
+    console.warn(`Pricing not found for model: ${model}`)
     return null
   }
   const pricing = MODEL_PRICE[model]
@@ -26,5 +27,5 @@ export function calculateCost(
   const outputCost =
     (completionTokens / 1_000_000) * pricing.output
 
-  return inputCost + outputCost
+  return Number((inputCost + outputCost).toFixed(8))
 }

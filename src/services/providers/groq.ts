@@ -1,6 +1,7 @@
     import OpenAi from "openai"
     import { db } from "../../db/client.js"
     import { requestLogs } from "../../db/schema.js"
+import { calculateCost } from "../../utils/pricing.js"
 
     const apiKey = process.env.GROQ_API_KEY
     if (!apiKey) {
@@ -35,6 +36,10 @@
         const promptTokens = usage.prompt_tokens ?? 0
         const completionTokens = usage.completion_tokens ?? 0
         const totalTokens = promptTokens + completionTokens
+        const estimatedCost = calculateCost(
+            response.model,
+            promptTokens,
+            completionTokens)
 
         await db.insert(requestLogs).values({
             provider: "groq",
@@ -44,6 +49,7 @@
             completionTokens,
             totalTokens,
             latency,
+            estimatedCost
         })
         } catch(err){
             console.log("failed to save telemetry",err)
