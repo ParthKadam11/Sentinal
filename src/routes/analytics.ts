@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { db } from "../db/client.js"
 import { requestLogs } from "../db/schema.js"
+import { resourceUsage } from "process"
 
 const analyticsRoute = new Hono()
 
@@ -66,8 +67,55 @@ analyticsRoute.get("/providers", async (c)=>{
     providers[log.provider].estimatedSpend +=
         log.estimatedCost ?? 0
     }
-
+    const result: Record<string, unknown> = {}
+    for (const [provider, stats] of Object.entries(providers)) {
+    result[provider] = {
+        requests: stats.requests,
+        totalTokens: stats.totalTokens,
+        averageLatency: Number(
+        (stats.totalLatency / stats.requests).toFixed(2)
+        ),
+        estimatedSpend: Number(
+        stats.estimatedSpend.toFixed(8)
+        ),
+    }
+    }
+    return c.json(result)
   } catch (err) {
+    return c.json(
+      { error: "Failed to fetch provider analytics" },
+      500
+    )
+  }
+})
+
+analyticsRoute.get("/daily",async (c)=>{
+    try{
+    const logs = await db.select().from(requestLogs)
+    const dailyStats: Record<string,{
+    requests: number
+    tokens: number
+    estimatedSpend: number} > = {}
+    
+    for (const log of logs) {
+    const date = log.createdAt.toISOString().split("T")[0]
+
+    if (!dailyStats[date]) {
+        dailyStats[date] = {
+        requests: 0,
+        tokens: 0,
+        estimatedSpend: 0,
+        }
+    }
+
+    dailyStats[date].requests += 1
+    dailyStats[date].tokens += log.totalTokens
+    dailyStats[date].estimatedSpend +=
+        log.estimatedCost ?? 0
+    }
+
+    return c.json(dailyStats)
+    }catch (err) {
     return c.json(
       { error: "Failed to fetch provider analytics" },
       500
