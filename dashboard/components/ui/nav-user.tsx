@@ -10,11 +10,11 @@ export function NavUser() {
         type="button"
       >
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-sm font-semibold text-background">
-          SR
+          AD
         </div>
         <div className="min-w-0 flex-1">
-          <div className="truncate text-sm font-medium">Sophie Reed</div>
-          <div className="truncate text-xs text-muted-foreground">Product Admin</div>
+          <div className="truncate text-sm font-medium">Admin</div>
+          <div className="truncate text-xs text-muted-foreground">Sentinal Admin</div>
         </div>
         <ChevronUpIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
       </button>

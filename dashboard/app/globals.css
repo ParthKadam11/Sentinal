@@ -18,7 +18,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-.dark {
+[data-theme="dark"] {
   --background: #0a0a0a;
   --foreground: #ededed;
   --muted: #27272a;
@@ -36,4 +36,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   margin: 0;
+  color-scheme: light;
+}
+
+[data-theme="dark"] body {
+  color-scheme: dark;
 }

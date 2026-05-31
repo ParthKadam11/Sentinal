@@ -15,7 +15,6 @@ import {
   MoonStarIcon,
   SunMediumIcon,
 } from "lucide-react";
-import { Logo } from "@/components/ui/efferd-ui-logo";
 import {
   Sidebar,
   SidebarContent,
@@ -69,6 +68,10 @@ function getActiveHash() {
   return window.location.hash || "#/overview";
 }
 
+function getThemeElement() {
+  return document.documentElement;
+}
+
 export function AppSidebar() {
   const [activeHash, setActiveHash] = useState("#/overview");
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -78,7 +81,7 @@ export function AppSidebar() {
     const initialDarkMode = savedTheme === "dark";
 
     setIsDarkMode(initialDarkMode);
-    document.documentElement.classList.toggle("dark", initialDarkMode);
+    getThemeElement().dataset.theme = initialDarkMode ? "dark" : "light";
     setActiveHash(getActiveHash());
 
     const handleHashChange = () => setActiveHash(getActiveHash());
@@ -90,7 +93,7 @@ export function AppSidebar() {
 
   useEffect(() => {
     window.localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-    document.documentElement.classList.toggle("dark", isDarkMode);
+    getThemeElement().dataset.theme = isDarkMode ? "dark" : "light";
   }, [isDarkMode]);
 
   const activeItemUrl = useMemo(() => activeHash, [activeHash]);
@@ -102,21 +105,19 @@ export function AppSidebar() {
       variant="sidebar"
     >
       <SidebarHeader className="relative h-14 justify-center px-2 py-0">
-        <a
-          className="flex h-10 w-max items-center justify-center rounded-lg px-3 hover:bg-muted dark:hover:bg-muted/50"
-          href="#link"
-        >
-          <Logo className="h-4" />
-          <span className="sr-only">Efferd</span>
+        <a className="flex h-10 items-center rounded-lg px-3 text-sm font-semibold tracking-[0.22em] text-foreground uppercase" href="#link">
+          Sentinal
         </a>
-        <button
-          aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-          className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/70 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          type="button"
-          onClick={() => setIsDarkMode((current) => !current)}
-        >
-          {isDarkMode ? <SunMediumIcon className="h-4 w-4" /> : <MoonStarIcon className="h-4 w-4" />}
-        </button>
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/70 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            type="button"
+            onClick={() => setIsDarkMode((current) => !current)}
+          >
+            {isDarkMode ? <SunMediumIcon className="h-4 w-4" /> : <MoonStarIcon className="h-4 w-4" />}
+          </button>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         {navGroups.map((group, index) => (
