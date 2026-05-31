@@ -123,4 +123,17 @@ analyticsRoute.get("/daily",async (c)=>{
   }
 })
 
+analyticsRoute.get("/budget", async (c) => {
+    try {
+
+    } catch (err) {
+        console.error(err)
+
+        return c.json(
+            { error: "Failed to fetch budget" },
+            500
+        )
+    }
+})
+
 export default analyticsRoute
