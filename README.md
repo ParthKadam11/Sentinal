@@ -2,6 +2,8 @@
 
 A lightweight, developer-focused AI routing, telemetry, and budget-guard for multi-provider chat integrations — built as a polished product demo.
 
+**Motto:** Guard spend, amplify trust.
+
 Sentinal sits between your app and multiple LLM providers (OpenAI, Groq, etc.), routing requests, recording usage and latency, estimating cost, and enforcing daily budgets so you never get surprised by runaway spend.
 
 **Highlights**
@@ -9,6 +11,7 @@ Sentinal sits between your app and multiple LLM providers (OpenAI, Groq, etc.), 
 - **Telemetry & analytics**: Tracks tokens, latency, model, and estimated cost per request.
 - **Budget guard**: Configurable daily budget check that blocks requests when exceeded.
 - **Cost estimation**: Per-model pricing and estimated spend calculation for informed decisions.
+- **SmartBudget Router (NEW)**: Dynamic, cost-aware routing and auto-throttling to maximize value while protecting budgets.
 
 **Use cases / Product Demo Scenarios**
 - **Safe AI orchestration for product teams**: Route requests to different models/providers while monitoring cost and latency in real time.
@@ -21,6 +24,22 @@ Sentinal sits between your app and multiple LLM providers (OpenAI, Groq, etc.), 
 - Provider integrations: OpenAI and Groq (example providers under `src/services/providers`).
 - Database logging of requests using Drizzle ORM with a `requestLogs` table to power analytics.
 - Pricing utilities for token-to-cost calculation.
+
+SmartBudget Router
+
+Sentinal now includes the SmartBudget Router: an intelligent, cost-aware routing layer that chooses the best provider and model per request based on latency, estimated cost, and confidence. It optimizes for budget and performance by routing low-cost requests to cheaper providers, escalating to higher-capacity models only when necessary, and automatically throttling or rejecting requests as budget thresholds approach.
+
+What it does:
+- Dynamically selects provider and model per-request to balance cost, latency, and quality.
+- Applies confidence-aware fallbacks: if a cheaper route can't meet quality thresholds, it transparently escalates to a better model.
+- Auto-throttles or rejects requests when configured budget setpoints are hit, preventing surprise spend.
+- Records routing rationale and cost trade-offs in telemetry for explainability and analytics.
+
+Why it matters:
+- Keeps AI experimentation safe and predictable for teams by preventing runaway spend.
+- Delivers practical, observable savings while preserving user experience.
+
+Example: Send a chat request specifying a desired cost/latency profile; the SmartBudget Router returns an answer along with the routing decision and estimated cost, making trade-offs visible to developers and product teams.
 
 Quick links
 - Routes: [src/routes/chat.ts](src/routes/chat.ts)
