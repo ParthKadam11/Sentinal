@@ -1,7 +1,7 @@
 import { db } from "../db/client.js";
 import { requestLogs } from "../db/schema.js";
 
-const DAILY_BUDGET_USD = 1;
+export const DAILY_BUDGET_USD = 1;
 
 export async function canSpendToday() {
   const logs = await db.select().from(requestLogs);

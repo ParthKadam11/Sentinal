@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import { db } from "../db/client.js"
 import { requestLogs } from "../db/schema.js"
-import { resourceUsage } from "process"
+import { canSpendToday,DAILY_BUDGET_USD } from "../services/budget.js"
 
 const analyticsRoute = new Hono()
 
@@ -125,7 +125,18 @@ analyticsRoute.get("/daily",async (c)=>{
 
 analyticsRoute.get("/budget", async (c) => {
     try {
-
+    const budget = await canSpendToday()
+    const usagePercent = Math.min(100,(budget.todaySpend / DAILY_BUDGET_USD) * 100)
+    
+    return c.json({
+        budget: DAILY_BUDGET_USD,
+        spent: budget.todaySpend,
+        remaining: budget.remainingBudget,
+        usagePercent: Number(
+            usagePercent.toFixed(2)
+        ),
+        allowed: budget.allowed,
+    })
     } catch (err) {
         console.error(err)
 
@@ -135,5 +146,6 @@ analyticsRoute.get("/budget", async (c) => {
         )
     }
 })
+
 
 export default analyticsRoute
