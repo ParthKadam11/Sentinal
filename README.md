@@ -126,7 +126,3 @@ Notes & caveats
 
 License
 - MIT
-
-Questions or changes?
-- Tell me what tone or audience you want (technical, marketing, investor demo) and I can adapt the README to match.
-
